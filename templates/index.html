@@ -1,0 +1,23 @@
+{% extends "base.html" %} {% block title %}Inicio · Taller Cifrado{% endblock %}
+{% block content %}
+<h2 class="text-2xl font-semibold mb-2">Taller de Cifrado</h2>
+<p class="mb-6 opacity-80">
+  Elige una sección para probar cifrado simétrico/asimétrico, generar/verificar
+  hashes y cifrar/descifrar archivos pequeños.
+</p>
+
+<div class="grid md:grid-cols-2 gap-4">
+  <a href="{{ url_for('cifrado_simetrico') }}" class="card"
+    >Cifrado Simétrico (AES-CBC)</a
+  >
+  <a href="{{ url_for('cifrado_asimetrico') }}" class="card"
+    >Cifrado Asimétrico (RSA)</a
+  >
+  <a href="{{ url_for('funcion_hash') }}" class="card"
+    >Funciones Hash (SHA-256)</a
+  >
+  <a href="{{ url_for('cifrado_archivos') }}" class="card"
+    >Cifrar/Descifrar Archivos (AES-GCM)</a
+  >
+</div>
+{% endblock %}

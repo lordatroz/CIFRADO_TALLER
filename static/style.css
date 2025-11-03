@@ -1,0 +1,53 @@
+.card {
+  display: block;
+  padding: 1rem;
+  border-radius: 0.9rem;
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  text-align: center;
+  font-weight: 700;
+  transition: transform 0.12s ease, outline-color 0.12s ease;
+}
+.card:hover {
+  outline: 2px solid rgba(94, 234, 212, 0.5);
+  transform: translateY(-1px);
+}
+
+.navlink {
+  padding: 0.35rem 0.7rem;
+  border-radius: 0.5rem;
+}
+.navlink:hover {
+  background: rgba(148, 163, 184, 0.12);
+}
+
+.btn-primary,
+.btn-secondary,
+.file-input {
+  padding: 0.6rem 1rem;
+  border-radius: 0.6rem;
+  font-weight: 700;
+}
+.btn-primary {
+  background: #10b981;
+  color: #06281a;
+}
+.btn-secondary {
+  background: #60a5fa;
+  color: #0a1a2b;
+}
+.file-input {
+  background: #0f172a;
+  border: 1px solid #334155;
+  color: #cbd5e1;
+  width: 100%;
+}
+
+.ok {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+.error {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}

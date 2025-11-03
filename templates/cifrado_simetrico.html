@@ -1,0 +1,81 @@
+{% extends "base.html" %} {% block title %}Cifrado Simétrico{% endblock %} {%
+block content %}
+<h2 class="text-xl font-semibold mb-4">
+  Cifrado Simétrico (AES-CBC con PKCS#7)
+</h2>
+
+<!-- CIFRAR (entrega paquete único) -->
+<section class="mb-8 p-4 rounded bg-slate-800/60 border border-slate-700">
+  <h3 class="font-semibold mb-2">Cifrar texto</h3>
+  <form method="post" class="space-y-3">
+    <textarea
+      name="texto_plain"
+      class="w-full p-3 rounded bg-slate-800"
+      rows="3"
+      placeholder="Escribe el texto que quieres cifrar"
+    ></textarea>
+    <button name="action" value="encrypt" class="btn-primary">
+      Cifrar y generar paquete
+    </button>
+  </form>
+
+  {% if result.mode == 'encrypt' %}
+  <div class="mt-4 space-y-2">
+    <p class="text-sm opacity-70">
+      Puedes usar el modo avanzado o simplemente copia este paquete:
+    </p>
+    <div class="p-3 rounded bg-slate-900/60 border border-slate-700 break-all">
+      <code>{{ result.bundle }}</code>
+    </div>
+    <details class="mt-2">
+      <summary class="cursor-pointer opacity-80">
+        Ver clave/IV/ciphertext por separado
+      </summary>
+      <p><b>Clave (hex):</b> {{ result.key }}</p>
+      <p><b>IV (hex):</b> {{ result.iv }}</p>
+      <p class="break-all"><b>Ciphertext (hex):</b> {{ result.ciphertext }}</p>
+    </details>
+  </div>
+  {% endif %}
+</section>
+
+<!-- DESCIFRAR (simple: pegar paquete) -->
+<section class="mb-8 p-4 rounded bg-slate-800/60 border border-slate-700">
+  <h3 class="font-semibold mb-2">Descifrar con paquete</h3>
+  <p class="text-sm opacity-80 mb-2">
+    Pega el paquete generado por el cifrado. Formato:
+    <code>aescbc:key=&lt;KEYHEX&gt;;iv=&lt;IVHEX&gt;;ct=&lt;CIPHERHEX&gt;</code>
+  </p>
+  <form method="post" class="space-y-3">
+    <textarea
+      name="bundle"
+      class="w-full p-3 rounded bg-slate-800 break-all"
+      rows="3"
+      placeholder="aescbc:key=...;iv=...;ct=..."
+    ></textarea>
+    <button name="action" value="decrypt_bundle" class="btn-secondary">
+      Descifrar paquete
+    </button>
+  </form>
+</section>
+
+<!-- DESCIFRAR AVANZADO (opcional) -->
+<section class="p-4 rounded bg-slate-800/40 border border-slate-700">
+  <h3 class="font-semibold mb-2">Descifrar avanzado (hex separados)</h3>
+  <form method="post" class="grid md:grid-cols-3 gap-3">
+    <input name="key_hex" class="file-input" placeholder="Clave (hex)" />
+    <input name="iv_hex" class="file-input" placeholder="IV (hex)" />
+    <input name="ct_hex" class="file-input" placeholder="Ciphertext (hex)" />
+    <div class="md:col-span-3">
+      <button name="action" value="decrypt_advanced" class="btn-secondary">
+        Descifrar (avanzado)
+      </button>
+    </div>
+  </form>
+</section>
+
+{% if result.mode == 'decrypt' and result.plaintext is not none %}
+<div class="mt-6 p-4 rounded bg-slate-800/70">
+  <b>Texto plano:</b> {{ result.plaintext }}
+</div>
+{% endif %} {% endblock %}

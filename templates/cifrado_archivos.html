@@ -1,0 +1,107 @@
+{% extends "base.html" %} {% block title %}Cifrado de Archivos{% endblock %} {%
+block content %}
+<h2 class="text-xl font-semibold mb-4">
+  Cifrar / Descifrar Archivos (AES-GCM)
+</h2>
+
+<!-- Toggle de modo -->
+<div class="mb-4 text-sm opacity-80">
+  <form method="post">
+    <input type="hidden" name="mode" value="{{ request.form.mode or 'zip' }}" />
+  </form>
+  <div class="inline-flex rounded overflow-hidden border border-slate-700">
+    <button
+      class="px-3 py-1 {{ 'bg-slate-700' if (request.form.mode or 'zip') == 'zip' else 'bg-slate-800' }}"
+      onclick="switchMode('zip')"
+      type="button"
+    >
+      Modo simple (ZIP)
+    </button>
+    <button
+      class="px-3 py-1 {{ 'bg-slate-700' if (request.form.mode or 'zip') == 'advanced' else 'bg-slate-800' }}"
+      onclick="switchMode('advanced')"
+      type="button"
+    >
+      Avanzado (.enc + .key)
+    </button>
+  </div>
+</div>
+
+<!-- MODO ZIP: 1 input para cifrar, 1 input para descifrar -->
+<div
+  id="mode-zip"
+  class="{{ '' if (request.form.mode or 'zip') == 'zip' else 'hidden' }}"
+>
+  <div class="grid md:grid-cols-2 gap-6">
+    <form method="post" enctype="multipart/form-data" class="space-y-3">
+      <input type="hidden" name="mode" value="zip" />
+      <input type="file" name="archivo_zip_enc" class="file-input" required />
+      <button name="action" value="encrypt" class="btn-primary">
+        Cifrar → descargar ZIP
+      </button>
+      <p class="text-xs opacity-70">
+        Se descargará un <code>.zip</code> con <code>.enc</code> y
+        <code>.key</code>.
+      </p>
+    </form>
+
+    <form method="post" enctype="multipart/form-data" class="space-y-3">
+      <input type="hidden" name="mode" value="zip" />
+      <input
+        type="file"
+        name="archivo_zip_dec"
+        class="file-input"
+        accept=".zip"
+        required
+      />
+      <input
+        type="text"
+        name="nombre_salida"
+        class="file-input"
+        placeholder="Nombre de salida (opcional)"
+      />
+      <button name="action" value="decrypt" class="btn-secondary">
+        Descifrar desde ZIP
+      </button>
+      <p class="text-xs opacity-70">
+        Sube el <code>.zip</code> que descargaste en el cifrado.
+      </p>
+    </form>
+  </div>
+</div>
+
+<!-- MODO AVANZADO: dos inputs (como antes) -->
+<div
+  id="mode-advanced"
+  class="{{ '' if (request.form.mode or '') == 'advanced' else 'hidden' }}"
+>
+  <div class="grid md:grid-cols-2 gap-6">
+    <form method="post" enctype="multipart/form-data" class="space-y-3">
+      <input type="hidden" name="mode" value="advanced" />
+      <input type="file" name="archivo_enc" class="file-input" required />
+      <button name="action" value="encrypt" class="btn-primary">
+        Cifrar (genera .enc y guarda .key)
+      </button>
+    </form>
+
+    <form method="post" enctype="multipart/form-data" class="space-y-3">
+      <input type="hidden" name="mode" value="advanced" />
+      <input type="file" name="archivo_dec" class="file-input" required />
+      <input type="file" name="keyfile" class="file-input" required />
+      <button name="action" value="decrypt" class="btn-secondary">
+        Descifrar (.enc + .key)
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+  function switchMode(m) {
+    document.getElementById("mode-zip").classList.toggle("hidden", m !== "zip");
+    document
+      .getElementById("mode-advanced")
+      .classList.toggle("hidden", m !== "advanced");
+    // Persistir elección enviando un POST “en vacío” con el modo (opcional).
+  }
+</script>
+{% endblock %}

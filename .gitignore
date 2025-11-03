@@ -8,3 +8,6 @@ instance/
 .DS_Store
 *.sqlite3
 .vscode
+uploads/
+keys/
+outputs/

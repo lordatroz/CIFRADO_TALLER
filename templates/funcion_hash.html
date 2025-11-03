@@ -1,0 +1,112 @@
+{% extends "base.html" %} {% block title %}Funciones Hash{% endblock %} {% block
+content %}
+<h2 class="text-xl font-semibold mb-4">Funciones Hash (SHA-256)</h2>
+
+<div class="grid md:grid-cols-2 gap-6">
+  <!-- Generar hash de texto -->
+  <section class="p-4 rounded bg-slate-800/60 border border-slate-700">
+    <h3 class="font-semibold mb-2">Hash de Texto</h3>
+    <form method="post" class="space-y-3">
+      <input type="hidden" name="mode" value="text" />
+      <textarea
+        name="texto"
+        class="w-full p-3 rounded bg-slate-800"
+        rows="3"
+        placeholder="Texto para calcular hash"
+      ></textarea>
+      <button class="btn-primary">Generar hash</button>
+    </form>
+    {% if result.text_hash %}
+    <div
+      class="mt-3 p-3 rounded bg-slate-900/60 border border-slate-700 break-all"
+    >
+      <b>SHA-256:</b> {{ result.text_hash }}
+    </div>
+    {% endif %}
+  </section>
+
+  <!-- Generar hash de archivo -->
+  <section class="p-4 rounded bg-slate-800/60 border border-slate-700">
+    <h3 class="font-semibold mb-2">Hash de Archivo</h3>
+    <form method="post" enctype="multipart/form-data" class="space-y-3">
+      <input type="hidden" name="mode" value="file" />
+      <input type="file" name="archivo" class="file-input" required />
+      <button class="btn-primary">Generar hash</button>
+    </form>
+    {% if result.file_hash %}
+    <div
+      class="mt-3 p-3 rounded bg-slate-900/60 border border-slate-700 break-all"
+    >
+      <p><b>Archivo:</b> {{ result.file_name }}</p>
+      <p><b>SHA-256:</b> {{ result.file_hash }}</p>
+    </div>
+    {% endif %}
+  </section>
+</div>
+
+<!-- Verificación -->
+<h3 class="text-lg font-semibold mt-8 mb-3">Verificar Hash</h3>
+<div class="grid md:grid-cols-2 gap-6">
+  <section class="p-4 rounded bg-slate-800/60 border border-slate-700">
+    <h4 class="font-semibold mb-2">Verificar hash de texto</h4>
+    <form method="post" class="space-y-3">
+      <input type="hidden" name="mode" value="verify_text" />
+      <textarea
+        name="texto_verif"
+        class="w-full p-3 rounded bg-slate-800"
+        rows="3"
+        placeholder="Texto a verificar"
+      ></textarea>
+      <input
+        name="hash_esperado_texto"
+        class="file-input"
+        placeholder="Hash esperado (hex)"
+      />
+      <button class="btn-secondary">Verificar</button>
+    </form>
+    {% if result.verify_text_ok is not none %}
+    <div
+      class="mt-3 p-3 rounded {{ 'ok' if result.verify_text_ok else 'error' }}"
+    >
+      <p class="font-semibold">
+        {{ 'Coincide ✅' if result.verify_text_ok else 'No coincide ❌' }}
+      </p>
+      <p class="text-xs break-all">
+        Esperado: {{ result.verify_text_expected }}
+      </p>
+      <p class="text-xs break-all">Calculado: {{ result.verify_text_got }}</p>
+    </div>
+    {% endif %}
+  </section>
+
+  <section class="p-4 rounded bg-slate-800/60 border border-slate-700">
+    <h4 class="font-semibold mb-2">Verificar hash de archivo</h4>
+    <form method="post" enctype="multipart/form-data" class="space-y-3">
+      <input type="hidden" name="mode" value="verify_file" />
+      <input type="file" name="archivo_verif" class="file-input" required />
+      <input
+        name="hash_esperado_archivo"
+        class="file-input"
+        placeholder="Hash esperado (hex)"
+      />
+      <button class="btn-secondary">Verificar</button>
+    </form>
+    {% if result.verify_file_ok is not none %}
+    <div
+      class="mt-3 p-3 rounded {{ 'ok' if result.verify_file_ok else 'error' }}"
+    >
+      <p class="font-semibold">
+        {{ 'Coincide ✅' if result.verify_file_ok else 'No coincide ❌' }}
+      </p>
+      <p class="text-xs break-all">
+        Esperado: {{ result.verify_file_expected }}
+      </p>
+      <p class="text-xs break-all">Calculado: {{ result.verify_file_got }}</p>
+      {% if result.verify_file_name %}
+      <p class="text-xs">Archivo: {{ result.verify_file_name }}</p>
+      {% endif %}
+    </div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %} {% block title %}Cifrado Asimétrico{% endblock %} {%
+block content %}
+<h2 class="text-xl font-semibold mb-4">
+  Cifrado Asimétrico (RSA 2048 + OAEP SHA-256)
+</h2>
+
+<section class="mb-8 p-4 rounded bg-slate-800/60 border border-slate-700">
+  <h3 class="font-semibold mb-2">Cifrar mensaje</h3>
+  <form method="post" class="space-y-3">
+    <textarea
+      name="mensaje"
+      class="w-full p-3 rounded bg-slate-800"
+      rows="3"
+      placeholder="Mensaje a cifrar"
+    ></textarea>
+    <button name="action" value="encrypt" class="btn-primary">
+      Cifrar y generar paquete
+    </button>
+  </form>
+
+  {% if result.mode == 'encrypt' %}
+  <div class="mt-4 space-y-2">
+    <p class="text-sm opacity-70">Copia y comparte este paquete:</p>
+    <div class="p-3 rounded bg-slate-900/60 border border-slate-700 break-all">
+      <code>{{ result.bundle }}</code>
+    </div>
+    <details class="mt-2">
+      <summary class="cursor-pointer opacity-80">Ver ciphertext (hex)</summary>
+      <p class="break-all"><b>ct (hex):</b> {{ result.ciphertext_hex }}</p>
+    </details>
+    <p class="text-xs opacity-60">
+      La clave pública está almacenada en el servidor (carpeta
+      <code>keys/</code>).
+    </p>
+  </div>
+  {% endif %}
+</section>
+
+<section class="mb-8 p-4 rounded bg-slate-800/60 border border-slate-700">
+  <h3 class="font-semibold mb-2">Descifrar con paquete</h3>
+  <p class="text-sm opacity-80 mb-2">
+    Formato: <code>rsaoaep:ct=&lt;HEX&gt;</code>
+  </p>
+  <form method="post" class="space-y-3">
+    <textarea
+      name="bundle"
+      class="w-full p-3 rounded bg-slate-800 break-all"
+      rows="3"
+      placeholder="rsaoaep:ct=..."
+    ></textarea>
+    <button name="action" value="decrypt_bundle" class="btn-secondary">
+      Descifrar paquete
+    </button>
+  </form>
+</section>
+
+<section class="p-4 rounded bg-slate-800/40 border border-slate-700">
+  <h3 class="font-semibold mb-2">Descifrar avanzado (ciphertext hex)</h3>
+  <form method="post" class="space-y-3">
+    <textarea
+      name="ciphertext_hex"
+      class="w-full p-3 rounded bg-slate-800 break-all"
+      rows="3"
+      placeholder="Ciphertext en hex"
+    ></textarea>
+    <button name="action" value="decrypt_raw" class="btn-secondary">
+      Descifrar (hex)
+    </button>
+  </form>
+</section>
+
+{% if result.mode == 'decrypt' and result.plaintext is not none %}
+<div class="mt-6 p-4 rounded bg-slate-800/70">
+  <b>Texto plano:</b> {{ result.plaintext }}
+</div>
+{% endif %} {% endblock %}

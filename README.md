@@ -59,7 +59,7 @@ Luego abre tu navegador en
 CIFRADO_TALLER/
 ├── app.py                        # Archivo principal Flask
 ├── controllers/                  # Lógica de cifrado y funciones auxiliares
-│   ├── cifrado_simetricO.py
+│   ├── cifrado_simetrico.py
 │   ├── cifrado_asimetrico.py
 │   ├── cifrado_archivos.py
 │   └── funcion_hash.py
